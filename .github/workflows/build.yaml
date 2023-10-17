@@ -1,0 +1,32 @@
+name: Build and Containerize Next.js App
+
+on:
+  push:
+    branches:
+      - main # or the name of your default branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Bump version and push tag
+        id: bump_version
+        uses: anothrNick/github-tag-action@1.34.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: patch # Default bump type (major, minor, patch)
+
+      - name: Login to DOCR with Access Token
+        run: |
+          echo ${{ secrets.DOCR_TOKEN }} | docker login registry.digitalocean.com -u ${{ secrets.DOCR_TOKEN }} --password-stdin
+
+      - name: Build Docker Image with New Version
+        run: docker build -t registry.digitalocean.com/dc-containers-test/text-next-app:${{ steps.bump_version.outputs.newTag }} .
+
+      - name: Push Docker Image to DOCR
+        run: docker push registry.digitalocean.com/dc-containers-test/text-next-app:${{ steps.bump_version.outputs.newTag }}
