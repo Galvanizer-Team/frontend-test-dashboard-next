@@ -35,10 +35,10 @@ jobs:
       - name: Debug Print
         run: |
           echo "REPO_NAME=${{ steps.repo_name.outputs.REPO_NAME }}"
-          echo "NEW_TAG=${{ steps.bump_version.outputs.newTag }}"
+          echo "NEW_TAG=${{ steps.bump_version.outputs.new_tag }}"
 
       - name: Build Docker Image with New Version
-        run: docker build -t registry.digitalocean.com/dc-containers-test/${{ steps.repo_name.outputs.REPO_NAME }}:${{ steps.bump_version.outputs.newTag || 'latest' }} .
+        run: docker build -t registry.digitalocean.com/dc-containers-test/${{ steps.repo_name.outputs.REPO_NAME }}:${{ steps.bump_version.outputs.new_tag || 'latest' }} .
 
       - name: Push Docker Image to DOCR
-        run: docker push registry.digitalocean.com/dc-containers-test/${{ steps.repo_name.outputs.REPO_NAME }}:${{ steps.bump_version.outputs.newTag || 'latest' }}
+        run: docker push registry.digitalocean.com/dc-containers-test/${{ steps.repo_name.outputs.REPO_NAME }}:${{ steps.bump_version.outputs.new_tag || 'latest' }}
