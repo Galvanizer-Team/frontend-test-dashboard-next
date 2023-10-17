@@ -32,8 +32,13 @@ jobs:
         run: |
           echo ${{ secrets.DOCR_TOKEN }} | docker login registry.digitalocean.com -u ${{ secrets.DOCR_TOKEN }} --password-stdin
 
+      - name: Debug Print
+        run: |
+          echo "REPO_NAME=${{ steps.repo_name.outputs.REPO_NAME }}"
+          echo "NEW_TAG=${{ steps.bump_version.outputs.newTag }}"
+
       - name: Build Docker Image with New Version
-        run: docker build -t registry.digitalocean.com/dc-containers-test/${{ steps.repo_name.outputs.REPO_NAME }}:${{ steps.bump_version.outputs.newTag }} .
+        run: docker build -t registry.digitalocean.com/dc-containers-test/${{ steps.repo_name.outputs.REPO_NAME }}:${{ steps.bump_version.outputs.newTag || 'latest' }} .
 
       - name: Push Docker Image to DOCR
-        run: docker push registry.digitalocean.com/dc-containers-test/${{ steps.repo_name.outputs.REPO_NAME }}:${{ steps.bump_version.outputs.newTag }}
+        run: docker push registry.digitalocean.com/dc-containers-test/${{ steps.repo_name.outputs.REPO_NAME }}:${{ steps.bump_version.outputs.newTag || 'latest' }}
