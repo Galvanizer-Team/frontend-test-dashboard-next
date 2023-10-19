@@ -8,8 +8,7 @@ export default function Home() {
       <h1 className="text-4xl">Hello There.</h1>
       <div className="text-sm mt-1 text-zinc-700">
         <p>This is a frontend application used to test some microservices.</p>
-        <p>This is version 1.1.0 of this application</p>
-        <p>Here is some additional text</p>
+        <p>This is the real v1.1.0 of this application</p>
       </div>
     </main>
   )
